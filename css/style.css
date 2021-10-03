@@ -49,3 +49,7 @@ li {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+#smallerText > div {
+    font-size: 12px;
+}
