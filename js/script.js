@@ -22,7 +22,7 @@ var clearHistoryBtnEl = $("#clearHistoryBtn");
 
 function clearFiveDay() {
   for (i = 0; i < 5; i++) {
-    var clear = document.getElementById("day" + i);
+    var clear = document.getElementById('day' + i);
     while (clear.firstChild) {
       clear.removeChild(clear.firstChild);
     }
@@ -30,26 +30,16 @@ function clearFiveDay() {
 }
 
 // Get the city name that was typed into the search box
-// then move the search box to the left and unhide the weather info panel
-// then check to see if what was entered is already in the history and if it isn't add it
-// clear the five day forcast panels, call getHistory and then move on to getLatLong
+// check to see the form was blank and verify that the api can find the city
 
 function getCityName(event) {
   event.preventDefault();
   cityName = cityNameEl.val();
   if (!cityName) {
-    alert("Please enter a city");
+    alert('Please enter a city');
     return;
   }
-  rePosition();
-  cityName = cityName.toUpperCase();
-  if (searchHistory.indexOf(cityName) == -1) {
-    searchHistory.push(cityName);
-    localStorage.setItem("weatherSearchHistory", JSON.stringify(searchHistory));
-  }
-  clearFiveDay();
-  getHistory();
-  getLatLong();
+  verifyCityNameExists();
 }
 
 // clear the search history buttons so they don't stack up with mutiple searches
@@ -57,11 +47,11 @@ function getCityName(event) {
 // if there is search history create a button for each item in the array
 
 function getHistory() {
-  var clear = document.getElementById("searchHistoryButtons");
+  var clear = document.getElementById('searchHistoryButtons');
   while (clear.firstChild) {
     clear.removeChild(clear.firstChild);
   }
-  searchHistory = JSON.parse(localStorage.getItem("weatherSearchHistory"));
+  searchHistory = JSON.parse(localStorage.getItem('weatherSearchHistory'));
   if (searchHistory !== null) {
     for (i = 0; i < searchHistory.length; i++) {
       searchHistoryButtonsEl.append(
@@ -71,22 +61,6 @@ function getHistory() {
   } else {
     searchHistory = [];
   }
-}
-
-// get the latitude and longitude from the open weather api then move on to getWeatherInfo
-
-function getLatLong() {
-  var url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=d2ee20e2eb15e888df5d53206e353c5d`;
-
-  fetch(url)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      latitude = data.coord.lat;
-      longitude = data.coord.lon;
-      getWeatherInfo();
-    });
 }
 
 // using the lat and long get the weather information from the api
@@ -102,7 +76,7 @@ function getWeatherInfo() {
     })
     .then(function (data) {
       var weatherIcon = data.current.weather[0].icon;
-      currentCityEl.text(cityName + " (" + currentDate + ")");
+      currentCityEl.text(cityName + ' (' + currentDate + ')');
       currentCityEl.append(
         `<img src="http://openweathermap.org/img/wn/${weatherIcon}@2x.png" alt="current weather icon" style="width:30px;height:30px;">`
       );
@@ -112,62 +86,101 @@ function getWeatherInfo() {
       var currentUv = data.current.uvi;
       currentUvEl.text(currentUv);
       if (currentUv < 3) {
-        currentUvEl.addClass("low rounded");
+        currentUvEl.attr('class', 'low rounded');
       } else if (currentUv > 5) {
-        currentUvEl.addClass("hi rounded");
+        currentUvEl.attr('class', 'hi rounded');
       } else {
-        currentUvEl.addClass("med rounded");
+        currentUvEl.attr( 'class', 'med rounded');
       }
       for (i = 0; i < 5; i++) {
         var nextDay = moment()
-          .add(i + 1, "d")
-          .format("M/DD/YYYY");
-        var buildFiveDay = $("#day" + i);
+          .add(i + 1, 'd')
+          .format('M/DD/YYYY');
+        var buildFiveDay = $('#day' + i);
         buildFiveDay.append(`<div>${nextDay}</div>`);
-        var futureWeatherIcon = data["daily"][i].weather[0]["icon"];
+        var futureWeatherIcon = data['daily'][i].weather[0]['icon'];
         buildFiveDay.append(
           `<img src="http://openweathermap.org/img/wn/${futureWeatherIcon}@2x.png" alt="weather icon" style="width:30px;height:30px;">`
         );
         buildFiveDay.append(
-          "<div>Temp: " + data["daily"][i].temp.day + "&deg;F</div>"
+          '<div>Temp: ' + data['daily'][i].temp.day + '&deg;F</div>'
         );
         buildFiveDay.append(
-          "<div>Wind: " + data["daily"][i].wind_speed + "</div>"
+          '<div>Wind: ' + data['daily'][i].wind_speed + '</div>'
         );
         buildFiveDay.append(
-          "<div>Humidity: " + data["daily"][i].humidity + "</div>"
+          '<div>Humidity: ' + data['daily'][i].humidity + '</div>'
         );
       }
     });
+}
+
+// Move elements to display weather information; if the city doesn't exist in the history add it
+// clear the 5 day forcast so that multiple searches don't stack 
+// get search history
+
+function prepareSite() {
+  rePosition();
+  cityName = cityName.toUpperCase();
+  if (searchHistory.indexOf(cityName) == -1) {
+    searchHistory.push(cityName);
+    localStorage.setItem('weatherSearchHistory', JSON.stringify(searchHistory));
+  }
+  clearFiveDay();
+  getHistory();
 }
 
 // page initially loads with the weather panel hidden and the search panel in the center
 // moves those around when a city is searched for either through the form or via a history button
 
 function rePosition() {
-  $("#leftSide").removeClass("justify-content-center");
-  $("#hide").removeClass("d-none");
+  $('#leftSide').removeClass('justify-content-center');
+  $('#hide').removeClass('d-none');
+}
+
+// check to see if api can find city name if it can prepare the site for the info and
+// get the latitude and longitude from the open weather api then move on to getWeatherInfo
+
+function verifyCityNameExists() {
+  var url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=d2ee20e2eb15e888df5d53206e353c5d`;
+
+  fetch(url)
+    .then(function (response) {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      } 
+      return response.json();
+    })
+    .then(function (data) {
+      latitude = data.coord.lat;
+      longitude = data.coord.lon;
+      prepareSite();
+      getWeatherInfo();
+    })
+    .catch(function(error) {
+      alert('Can\'t find city, please try again');
+    });
 }
 
 // listens for the city to be submitted via the form
 
-cityFormEl.on("submit", getCityName);
+cityFormEl.on('submit', getCityName);
 
 // listens for the clear history button 
 // if clicked clears just this app's localStorage
 
-clearHistoryBtnEl.on("click", function () {
-  localStorage.removeItem("weatherSearchHistory");
+clearHistoryBtnEl.on('click', function () {
+  localStorage.removeItem('weatherSearchHistory');
   getHistory();
 });
 
 // listens for the history buttons to be clicked after they have been built
 
-searchHistoryButtonsEl.on("click", ".hisBtn", function () {
+searchHistoryButtonsEl.on('click', '.hisBtn', function () {
   cityName = $(this).html();
   rePosition();
   clearFiveDay();
-  getLatLong();
+  verifyCityNameExists();
 });
 
 //gets the history on page load
