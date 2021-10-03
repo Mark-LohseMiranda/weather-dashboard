@@ -57,49 +57,35 @@
                 placeholder="San Diego"
               />
             </div>
-            <button type="submit" class="btn btn-block btn-sm btn-primary">
+            <button id="searchBtn" type="submit" class="btn btn-block btn-sm btn-primary">
               Search
             </button>
-            <hr>
-            <button type="submit" class="btn btn-block btn-sm btn-primary">
-              Search
-            </button>
+            <hr />
           </form>
+          <button id="clearHistoryBtn" type="submit" class="btn btn-block btn-sm btn-primary">
+            Clear History
+          </button>
+          <hr>
+          <div id="searchHistoryButtons"></div>
         </div>
         <div class="col-sm-12 col-md-9">
-          
           <div id="currentWeather" class="border">
-            <h4 class = "text-capitalize" id="currentCity">City</h4>
+            <h4 id="currentCity">City</h4>
             <div>Temp: <span id="currentTemp"></span>&deg;F</div>
             <div>Wind: <span id="currentWind"></span> MPH</div>
             <div>Humidity: <span id="currentHumidity"></span>%</div>
             <div>UV Index: <span id="currentUv"></span></div>
           </div>
-          
+
           <h5 class="fiveDay">5-Day Forcast:</h5>
 
           <div id="smallerText" class="row justify-content-around">
-
-            
-            <div id="day0" class="col-sm-12 col-md-5 col-lg-2 title">
- 
-            </div>
-            <div id="day1" class="col-sm-12 col-md-5 col-lg-2 title">
-
-            </div>
-            <div id="day2" class="col-sm-12 col-md-5 col-lg-2 title">
-
-            </div>
-            <div id="day3" class="col-sm-12 col-md-5 col-lg-2 title">
-
-            </div>
-            <div id="day4" class="col-sm-12 col-md-5 col-lg-2 title">
-
-            </div>
-            
+            <div id="day0" class="col-sm-12 col-md-5 col-lg-2 title"></div>
+            <div id="day1" class="col-sm-12 col-md-5 col-lg-2 title"></div>
+            <div id="day2" class="col-sm-12 col-md-5 col-lg-2 title"></div>
+            <div id="day3" class="col-sm-12 col-md-5 col-lg-2 title"></div>
+            <div id="day4" class="col-sm-12 col-md-5 col-lg-2 title"></div>
           </div>
-            
-          
         </div>
       </div>
     </div>
