@@ -1,12 +1,8 @@
 * {
   font-family: "Roboto", sans-serif;
-  
 }
 
-
-
 .title {
-  
   background: rgb(74, 45, 253);
   background: linear-gradient(
     0deg,
@@ -16,10 +12,6 @@
   color: white;
   margin-bottom: 10px;
   padding: 10px;
-}
-
-li {
-  list-style-type: none;
 }
 
 #currentWeather {
@@ -46,10 +38,10 @@ li {
 }
 
 .fiveDay {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 #smallerText > div {
-    font-size: 12px;
+  font-size: 12px;
 }
