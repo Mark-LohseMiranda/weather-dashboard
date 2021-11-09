@@ -1,6 +1,6 @@
 # weather-dashboard
 
-Utilizing javascript/html/css and OpenWeather One Call API a user is able to search, by city, for the current weather and 5 day forcast.
+Utilizing javascript/html/css and OpenWeather One Call API a user is able to search, by city, for the current weather and 5 day forecast.
 
 Additionally the search history is kept in local storage.
 
